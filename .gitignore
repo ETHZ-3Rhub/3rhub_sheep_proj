@@ -1,0 +1,10 @@
+__pycache__/
+.DS_Store
+
+# real weights are distributed as GitHub Release assets, not committed —
+# see models/*/source.toml
+models/*/best.pt
+models/*/output_mapping.csv
+
+# local zips built for uploading as release assets — not part of the repo
+/release_assets/

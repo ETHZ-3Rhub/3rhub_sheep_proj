@@ -1,0 +1,33 @@
+# Sheep side-view tracking + QC animation (bespoke, not built into the app).
+#
+# References a model folder AND a script under user/, so this is UNTRUSTED
+# and appears below the "— user supplied pipelines —" divider with a trust
+# prompt on first select. Runs the standard preprocessing (confidence filter,
+# interpolate, smooth) then renders one skeleton-overlay animation per group
+# — no classifier/features/clustering, that's still to come.
+
+name = "Sheep (side view)"
+
+[models.sheep_side]
+weights = "sheep_side"
+instances = [
+  { type = "sheep_side_head", max = 1 },
+  { type = "sheep_side_spine", max = 1 },
+  { type = "sheep_side_forelimb", max = 1 },
+  { type = "sheep_side_forelimb_bg", max = 1 },
+  { type = "sheep_side_hindlimb", max = 1 },
+  { type = "sheep_side_hindlimb_bg", max = 1 },
+  { type = "treadmill_front", max = 1 },
+  { type = "treadmill_back", max = 1 },
+  { type = "grid", max = 1 },
+]
+tracker = { track_buffer = 90 }  # frames a lost track stays alive for re-matching (default 30)
+
+[loader]
+format = "yolo3r"
+fps = 30  # placeholder — set to the real camera frame rate
+group_tag = "group"
+
+[script]
+entry = "scripts/sheep_side.py:run"
+likelihood_min = 0.5

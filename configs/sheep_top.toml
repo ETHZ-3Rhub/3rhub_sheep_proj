@@ -1,0 +1,29 @@
+# Sheep top-view tracking + QC animation (bespoke, not built into the app).
+#
+# References a model folder AND a script under user/, so this is UNTRUSTED
+# and appears below the "— user supplied pipelines —" divider with a trust
+# prompt on first select. Runs the standard preprocessing (confidence filter,
+# interpolate, smooth) then renders one skeleton-overlay animation per group
+# — no classifier/features/clustering, that's still to come.
+
+name = "Sheep (top view)"
+
+[models.sheep_top]
+weights = "sheep_top"
+instances = [
+  { type = "sheep_top_head", max = 1 },
+  { type = "sheep_top_body", max = 1 },
+  { type = "treadmill_front", max = 1 },
+  { type = "treadmill_back", max = 1 },
+  { type = "grid", max = 1 },
+]
+tracker = { track_buffer = 90 }  # frames a lost track stays alive for re-matching (default 30)
+
+[loader]
+format = "yolo3r"
+fps = 30  # placeholder — set to the real camera frame rate
+group_tag = "group"
+
+[script]
+entry = "scripts/sheep_top.py:run"
+likelihood_min = 0.5
